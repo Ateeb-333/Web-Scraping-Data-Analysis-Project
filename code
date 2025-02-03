@@ -1,0 +1,49 @@
+# Install required library
+pip install openpyxl
+
+import pandas as pd
+import numpy as np
+
+# Load dataset
+file_path = "B:\\PAI_Final_project\\Product_reviews.xlsx"
+data = pd.ExcelFile(file_path)
+
+# Display available sheets
+print(data.sheet_names)
+
+# Parse the required sheet
+df = data.parse("Sheet1")
+
+# Display first few rows
+df.head()
+
+# Class for processing data
+class ProductReviewAnalysis:
+    def __init__(self, data):
+        """Initialize with raw data."""
+        self.raw_data = data
+        self.cleaned_data = None
+
+    def clean_and_structure(self):
+        """Cleans and structures the dataset."""
+        df = self.raw_data.copy()
+        
+        # Rename columns for clarity
+        df.rename(columns={
+            "Satisfaction Percentage": "SentimentScore",
+            "Product Reviews": "ReviewText"
+        }, inplace=True)
+
+        # Handle missing values
+        df["SentimentScore"] = df["SentimentScore"].fillna(df["SentimentScore"].mean())
+        df["ReviewText"] = df["ReviewText"].fillna("No review available")
+
+        self.cleaned_data = df
+        return df
+
+# Create an instance and clean data
+analyzer = ProductReviewAnalysis(df)
+cleaned_df = analyzer.clean_and_structure()
+
+# Display cleaned data
+cleaned_df.head()
