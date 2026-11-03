@@ -1,2 +1,6 @@
-config.bat
 node_modules
+
+# local env files (restored after the worm stripped them)
+.env
+.env.*
+!.env.example
